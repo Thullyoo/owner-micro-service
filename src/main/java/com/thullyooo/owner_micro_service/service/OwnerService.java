@@ -5,6 +5,7 @@ import com.thullyooo.owner_micro_service.domain.address.DTO.AddressRequestDTO;
 import com.thullyooo.owner_micro_service.domain.owner.DTO.OwnerRequestDTO;
 import com.thullyooo.owner_micro_service.domain.owner.DTO.OwnerResponseDTO;
 import com.thullyooo.owner_micro_service.domain.owner.Owner;
+import com.thullyooo.owner_micro_service.repository.AddressRepository;
 import com.thullyooo.owner_micro_service.repository.OwnerRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class OwnerService {
 
     @Autowired
     private OwnerRepository ownerRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Transactional
     public OwnerResponseDTO register(OwnerRequestDTO dto){
@@ -43,6 +47,7 @@ public class OwnerService {
                     .postalCode(address.postalCode())
                     .owner(owner)
                     .build();
+            addressRepository.save(addressNew);
             addressList.add(addressNew);
         }
 
