@@ -2,6 +2,7 @@ package com.thullyooo.owner_micro_service.domain.owner;
 
 import com.thullyooo.owner_micro_service.domain.address.Address;
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,6 +12,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "TB_OWNERS")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Owner implements UserDetails {
 
     @Id
