@@ -16,15 +16,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private OwnerRepository repository;
 
-
-
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Owner> owner = repository.findByName(username);
-        if (owner.isEmpty()){
-            throw new UsernameNotFoundException("Owner não encontrado");
-        }
-        return owner.get();
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        return repository.findByName(name)
+                .map(UserDetailsImpl::new)
+                .orElseThrow(() -> new UsernameNotFoundException("Owner não encotrado"));
 
     }
 }
