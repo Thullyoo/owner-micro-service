@@ -35,23 +35,23 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-           return http
-                    .csrf(csrf -> csrf.disable())
-                    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                   .authorizeHttpRequests(
-                            auth -> {
-                                auth
-                                        .requestMatchers(HttpMethod.POST,"/owner/register").permitAll()
-                                        .requestMatchers(HttpMethod.POST,"/owner/login").permitAll()
-                                        .anyRequest()
-                                        .authenticated();
-                            }
-                    )
-                   .build();
+        return http
+                .csrf().disable()
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> {
+                    auth
+                            .requestMatchers(HttpMethod.POST, "/owner/register").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/owner/login").permitAll()
+                            .anyRequest().authenticated();
+                })
+                .httpBasic(Customizer.withDefaults())
+                .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
+                .build();
     }
 
+
     @Bean
-    PasswordEncoder passwordEncoder(){
+    BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
