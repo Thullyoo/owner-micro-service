@@ -7,8 +7,12 @@ import com.thullyooo.owner_micro_service.domain.owner.DTO.OwnerResponseDTO;
 import com.thullyooo.owner_micro_service.domain.owner.Owner;
 import com.thullyooo.owner_micro_service.repository.AddressRepository;
 import com.thullyooo.owner_micro_service.repository.OwnerRepository;
+import com.thullyooo.owner_micro_service.security.JWTService;
+import com.thullyooo.owner_micro_service.security.TokenResponseDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +23,16 @@ import java.util.List;
 public class OwnerService {
 
     @Autowired
-    private PasswordEncoder encoder;
+    private BCryptPasswordEncoder encoder;
 
     @Autowired
     private OwnerRepository ownerRepository;
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private JWTService jwtService;
 
     @Transactional
     public OwnerResponseDTO register(OwnerRequestDTO dto){
@@ -56,6 +63,10 @@ public class OwnerService {
         ownerRepository.save(owner);
 
         return new OwnerResponseDTO(owner.getName(), owner.getEmail(), owner.getDocument(), owner.getPassword(), owner.getAddressesList());
+    }
+
+    public TokenResponseDTO login(Authentication authentication) {
+        return new TokenResponseDTO(jwtService.generateToken(authentication), 3000L);
     }
 
 }
